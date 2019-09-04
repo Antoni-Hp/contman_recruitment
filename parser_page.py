@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import re
 
+
 def getParser(page):
     return BeautifulSoup(page, 'html.parser')
 

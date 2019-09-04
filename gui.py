@@ -20,10 +20,10 @@ class startGUI():
         self.set_url_txt = tk.Label(self.window, text = "Enter the URL")
         self.set_url = tk.Entry(self.window, width = 40)
         self.download = tk.Button(self.window, text = "Download page")
-        self.download.bind('<Button-1>', self.cos)
+        self.download.bind('<Button-1>', self.button_action)
         self.score = tk.Text(self.window, height = 17, width = 44, state = 'disabled')
 
-    def cos(self, event):
+    def button_action(self, event):
         self.url = self.set_url.get()
         if self.is_url() is False:
             tk.messagebox.showinfo("Wrong url", "Please enter a valid URL")
@@ -38,7 +38,6 @@ class startGUI():
             for k, v in self.stats.items():
                 self.score.insert(tk.END, '%s : %s\n' %(k, v))
                 self.score.see(tk.END)
-
         else:
             self.score.insert(tk.END, self.stats)
         self.score.configure(state = 'disable')
