@@ -1,14 +1,17 @@
 import gui
 import fetcher
-import parser
+import parser_page
 
 
+def onUrl(url):
+    page_fetcher = fetcher.getPage(url)
+    page_parser = parser_page.getParser(page_fetcher)
+    keyworwds = parser_page.getKeywords(page_parser)
+    if keyworwds is not False:
+        statistics = parser_page.getStats(page_parser, keyworwds)
+    else:
+        statistics = "Page does not contain keywords"
+    return statistics
 
 
-ui = gui.startGUI()
-# pageUrl = ui.getUrl()
-ui.getUrl()
-# pageText = fetcher.getPage(pageUrl)
-# keyrowds = parser.getKeywords(pageText)
-# statistics = parser.getStats(keyrowds, pageText)
-# ui.showStats(statistics)
+gui.startGUI(onUrl)

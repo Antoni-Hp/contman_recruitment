@@ -1,10 +1,12 @@
 import tkinter as tk
-# from tkinter.ttk import DISABLED, NORMAL
+from urllib.parse import urlparse
+import tkinter.messagebox
 
 
 class startGUI():
 
-    def __init__(self):
+    def __init__(self, urlCallback):
+        self.urlCallback = urlCallback
         self.window = tk.Tk()
         self.window.geometry("400x400")
         self.window.resizable(False, False)
@@ -18,14 +20,36 @@ class startGUI():
         self.set_url_txt = tk.Label(self.window, text = "Enter the URL")
         self.set_url = tk.Entry(self.window, width = 40)
         self.download = tk.Button(self.window, text = "Download page")
-        self.download.bind('<Button-1>', self.cos())
+        self.download.bind('<Button-1>', self.cos)
         self.score = tk.Text(self.window, height = 17, width = 44, state = 'disabled')
-        return True
-    def cos(self):
-        return True
-    def getUrl(self):
-        # self.download.bind('<Button-1>', self)
-        print("cos")
+
+    def cos(self, event):
+        self.url = self.set_url.get()
+        if self.is_url() is False:
+            tk.messagebox.showinfo("Wrong url", "Please enter a valid URL")
+        else:
+            self.stats = self.urlCallback(self.url)
+            self.showStats()
+
+    def showStats(self):
+        self.score.configure(state = 'normal')
+        self.score.delete('1.0', tk.END)
+        if self.stats != 'Page does not contain keywords':
+            for k, v in self.stats.items():
+                self.score.insert(tk.END, '%s : %s\n' %(k, v))
+                self.score.see(tk.END)
+
+        else:
+            self.score.insert(tk.END, self.stats)
+        self.score.configure(state = 'disable')
+
+    def is_url(self):
+        try:
+            result = urlparse(self.url)
+            return all([result.scheme, result.netloc])
+        except ValueError:
+            return False
+
     def show(self):
         self.set_url_txt.place(x = 100, y = 20)
         self.set_url.place(x = 20, y = 48)
